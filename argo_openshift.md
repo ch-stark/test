@@ -17,17 +17,18 @@ the workflows. Here are the requirements and steps to run the workflows.
 ## 1. Download Argo
 
 Download the latest Argo binary version from https://github.com/argoproj/argo/releases/latest.
-```
+
 
 Also you can use this command to install for Linux 
 
-```
+```bash
 sudo curl -sSL -o /usr/local/bin/argo https://github.com/argoproj/argo/releases/download/v2.3.0/argo-linux-amd64
 sudo chmod +x /usr/local/bin/argo
 ```
 
 ## 2. Install the Controller and UI
-```
+
+```bash
 oc new-project create namespace argo
 oc create  -n argo -f https://raw.githubusercontent.com/argoproj/argo/stable/manifests/install.yaml
 ```
@@ -39,22 +40,25 @@ features such as artifacts, outputs, access to secrets, etc... For demo purposes
 command to grant admin privileges to the 'default' service account in the namespace 'default':
 
 
-```
+```bash
 oc create serviceaccount hostmounter
 oc adm policy add-scc-to-user hostmount-anyuid -z hostmounter
 argo submit --serviceAccount hostmounter --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/hello-world.yaml
 argo submit --serviceAccount hostmounter --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/coinflip.yaml
 argo submit --serviceAccount hostmounter --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/loops-maps.yaml
 ```
+
 For the bare minimum set of privileges which a workflow needs to function, see
 [Workflow RBAC](docs/workflow-rbac.md). You can also submit workflows which run with a different
 service account using:
-```
+
+```bash
 argo submit --serviceaccount <name>
 ```
 
 ## 4. Run Simple Example Workflows
-```
+
+```bash
 argo submit --serviceAccount hostmounter  https://raw.githubusercontent.com/argoproj/argo/master/examples/hello-world.yaml
 argo submit --serviceAccount hostmounter  https://raw.githubusercontent.com/argoproj/argo/master/examples/coinflip.yaml
 argo submit --serviceAccount hostmounter  https://raw.githubusercontent.com/argoproj/argo/master/examples/loops-maps.yaml
@@ -67,7 +71,7 @@ You can also create workflows directly with kubectl. However, the Argo CLI offer
 that kubectl does not, such as YAML validation, workflow visualization, parameter passing, retries
 and resubmits, suspend and resume, and more.
 
-```
+```bash
 oc create -f https://raw.githubusercontent.com/argoproj/argo/master/examples/hello-world.yaml
 oc get wf
 oc  get wf hello-world-xxx
@@ -82,8 +86,9 @@ Additional examples are available [here](https://github.com/argoproj/argo/blob/m
 Argo supports S3 (AWS, GCS, Minio) as well as Artifactory as artifact repositories. This tutorial
 uses Minio for the sake of portability. Instructions on how to configure other artifact repositories
 are [here](https://github.com/argoproj/argo/blob/master/ARTIFACT_REPO.md).
-```
 
+
+```bash
 helm init
 
 helm install stable/minio \
@@ -96,7 +101,8 @@ helm install stable/minio \
 ```
 
 Login to the Minio UI using a web browser (port 9000) after exposing obtaining the external IP using `kubectl`.
-```
+
+```bash
 oc get service argo-artifacts -o wide
 ```
 
@@ -111,7 +117,8 @@ Create a bucket named `my-bucket` from the Minio UI.
 
 Edit the workflow-controller config map to reference the service name (argo-artifacts) and
 secret (argo-artifacts) created by the helm install:
-```
+
+```bash
 oc edit cm -n argo workflow-controller-configmap
 ...
 data:
@@ -139,7 +146,8 @@ installed in a different namespace then you will need to create a copy of its se
 namespace you use for workflows.
 
 ## 7. Run a workflow which uses artifacts
-```
+
+```bash
 argo submit -serviceAccount hostmounter https://raw.githubusercontent.com/argoproj/argo/master/examples/artifact-passing.yaml
 ```
 
@@ -148,8 +156,9 @@ argo submit -serviceAccount hostmounter https://raw.githubusercontent.com/argopr
 By default, the Argo UI service is not exposed with an external IP. To access the UI, use one of the
 following methods:
 
-#### Method 1: kubectl port-forward
-```
+#### oc port-forward
+
+```bash
 oc -n argo port-forward deployment/argo-ui 8001:8001
 ```
 Then visit: http://127.0.0.1:8001
