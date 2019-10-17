@@ -38,7 +38,14 @@ To run all of the examples in this guide, the 'default' service account is too l
 features such as artifacts, outputs, access to secrets, etc... For demo purposes, run the following
 command to grant admin privileges to the 'default' service account in the namespace 'default':
 ```
-kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=argo:default
+oc create serviceaccount hostmounter
+oc adm policy add-scc-to-user hostmount-anyuid -z hostmounter
+
+
+```
+argo submit --serviceAccount hostmounter --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/hello-world.yaml
+argo submit --serviceAccount hostmounter --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/coinflip.yaml
+argo submit --serviceAccount hostmounter --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/loops-maps.yaml
 ```
 For the bare minimum set of privileges which a workflow needs to function, see
 [Workflow RBAC](docs/workflow-rbac.md). You can also submit workflows which run with a different
@@ -49,9 +56,9 @@ argo submit --serviceaccount <name>
 
 ## 4. Run Simple Example Workflows
 ```
-argo submit --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/hello-world.yaml
-argo submit --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/coinflip.yaml
-argo submit --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/loops-maps.yaml
+argo submit --serviceAccount hostmounter  https://raw.githubusercontent.com/argoproj/argo/master/examples/hello-world.yaml
+argo submit --serviceAccount hostmounter  https://raw.githubusercontent.com/argoproj/argo/master/examples/coinflip.yaml
+argo submit --serviceAccount hostmounter  https://raw.githubusercontent.com/argoproj/argo/master/examples/loops-maps.yaml
 argo list
 argo get xxx-workflow-name-xxx
 argo logs xxx-pod-name-xxx #from get command above
@@ -61,11 +68,11 @@ You can also create workflows directly with kubectl. However, the Argo CLI offer
 that kubectl does not, such as YAML validation, workflow visualization, parameter passing, retries
 and resubmits, suspend and resume, and more.
 ```
-kubectl create -f https://raw.githubusercontent.com/argoproj/argo/master/examples/hello-world.yaml
-kubectl get wf
-kubectl get wf hello-world-xxx
-kubectl get po --selector=workflows.argoproj.io/workflow=hello-world-xxx --show-all
-kubectl logs hello-world-yyy -c main
+oc create -f https://raw.githubusercontent.com/argoproj/argo/master/examples/hello-world.yaml
+oc get wf
+oc  get wf hello-world-xxx
+oc get po --selector=workflows.argoproj.io/workflow=hello-world-xxx --show-all
+oc logs hello-world-yyy -c main
 ```
 
 Additional examples are available [here](https://github.com/argoproj/argo/blob/master/examples/README.md).
@@ -76,6 +83,9 @@ Argo supports S3 (AWS, GCS, Minio) as well as Artifactory as artifact repositori
 uses Minio for the sake of portability. Instructions on how to configure other artifact repositories
 are [here](https://github.com/argoproj/argo/blob/master/ARTIFACT_REPO.md).
 ```
+
+helm init
+
 helm install stable/minio \
   --name argo-artifacts \
   --set service.type=LoadBalancer \
@@ -87,12 +97,8 @@ helm install stable/minio \
 
 Login to the Minio UI using a web browser (port 9000) after exposing obtaining the external IP using `kubectl`.
 ```
-kubectl get service argo-artifacts -o wide
-```
-On Minikube:
-```
-minikube -n argo service --url argo-artifacts
-```
+oc get service argo-artifacts -o wide
+
 
 NOTE: When minio is installed via Helm, it uses the following hard-wired default credentials,
 which you will use to login to the UI:
@@ -106,7 +112,7 @@ Create a bucket named `my-bucket` from the Minio UI.
 Edit the workflow-controller config map to reference the service name (argo-artifacts) and
 secret (argo-artifacts) created by the helm install:
 ```
-kubectl edit cm -n argo workflow-controller-configmap
+oc edit cm -n argo workflow-controller-configmap
 ...
 data:
   config: |
@@ -134,7 +140,7 @@ namespace you use for workflows.
 
 ## 7. Run a workflow which uses artifacts
 ```
-argo submit https://raw.githubusercontent.com/argoproj/argo/master/examples/artifact-passing.yaml
+argo submit -serviceAccount hostmounter https://raw.githubusercontent.com/argoproj/argo/master/examples/artifact-passing.yaml
 ```
 
 ## 8. Access the Argo UI
@@ -144,7 +150,7 @@ following methods:
 
 #### Method 1: kubectl port-forward
 ```
-kubectl -n argo port-forward deployment/argo-ui 8001:8001
+oc -n argo port-forward deployment/argo-ui 8001:8001
 ```
 Then visit: http://127.0.0.1:8001
 
