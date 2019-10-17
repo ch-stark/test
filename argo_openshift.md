@@ -37,6 +37,8 @@ oc create  -n argo -f https://raw.githubusercontent.com/argoproj/argo/stable/man
 To run all of the examples in this guide, the 'default' service account is too limited to support
 features such as artifacts, outputs, access to secrets, etc... For demo purposes, run the following
 command to grant admin privileges to the 'default' service account in the namespace 'default':
+
+
 ```
 oc create serviceaccount hostmounter
 oc adm policy add-scc-to-user hostmount-anyuid -z hostmounter
@@ -152,28 +154,4 @@ oc -n argo port-forward deployment/argo-ui 8001:8001
 ```
 Then visit: http://127.0.0.1:8001
 
-#### Method 2: kubectl proxy
-```
-kubectl proxy
-```
-Then visit: http://127.0.0.1:8001/api/v1/namespaces/argo/services/argo-ui/proxy/
 
-NOTE: artifact download and webconsole is not supported using this method
-
-#### Method 3: Expose a LoadBalancer
-Update the argo-ui service to be of type `LoadBalancer`.
-```
-kubectl patch svc argo-ui -n argo -p '{"spec": {"type": "LoadBalancer"}}'
-```
-Then wait for the external IP to be made available:
-```
-kubectl get svc argo-ui -n argo
-NAME      TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)        AGE
-argo-ui   LoadBalancer   10.19.255.205   35.197.49.167   80:30999/TCP   1m
-```
-
-NOTE: On Minikube, you won't get an external IP after updating the service -- it will always show
-`pending`. Run the following command to determine the Argo UI URL:
-```
-minikube service -n argo --url argo-ui
-```
