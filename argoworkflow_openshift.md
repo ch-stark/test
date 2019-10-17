@@ -201,3 +201,19 @@ Then visit: http://127.0.0.1:8001
 
 
 ## 9. TODO More Testing and examples, more analysis on the WorkFlow Capabilities
+
+https://github.com/kubeflow/pipelines/issues/1654
+
+```bash
+Name:                teardrop-8ft7s
+Namespace:           argoworkflow
+ServiceAccount:      hostmounter
+Status:              Failed
+Message:             invalid spec: templates.teardrop.tasks.create-chain templates.create-chain.outputs.artifacts.chain: kubelet executor does not support outputs from base image layer. must use emptyDir
+Created:             Thu Oct 17 15:50:49 +0200 (1 second ago)
+Started:             Thu Oct 17 15:50:49 +0200 (1 second ago)
+Finished:            Thu Oct 17 15:50:49 +0200 (1 second ago)
+Duration:            0 seconds
+[cstark@cstark engineering]$ argo submit --serviceaccount hostmounter --watch https://raw.githubusercontent.com/ch-stark/test/master/advanced_workflow.yaml
+
+```
