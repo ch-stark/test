@@ -49,6 +49,22 @@ argo submit --serviceAccount hostmounter --watch https://raw.githubusercontent.c
 Currently running into this issue
 https://github.com/argoproj/argo/issues/1272
 
+Need to add 
+
+```bash
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: workflow-controller-configmap
+data:
+  config: |
+    ContainerRuntimeExecutor: kubelet
+
+```
+
+and scale down and up
+
 
 
 ## 4. Run Simple Example Workflows
