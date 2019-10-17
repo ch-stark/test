@@ -44,7 +44,12 @@ oc adm policy add-scc-to-user hostmount-anyuid -z hostmounter
 argo submit --serviceAccount hostmounter --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/hello-world.yaml
 argo submit --serviceAccount hostmounter --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/coinflip.yaml
 argo submit --serviceAccount hostmounter --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/loops-maps.yaml
+
 ```
+Currently running into this issue
+https://github.com/argoproj/argo/issues/1272
+
+
 
 ## 4. Run Simple Example Workflows
 
