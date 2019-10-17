@@ -80,6 +80,7 @@ argo get xxx-workflow-name-xxx
 argo logs xxx-pod-name-xxx #from get command above
 ```
 
+```bash
 example:
 Name:                loops-maps-7sqwk
 Namespace:           argoworkflow
@@ -96,13 +97,13 @@ STEP                                         PODNAME                      DURATI
    ├-✔ test-linux(1:image:debian,tag:8.9)    loops-maps-7sqwk-3416869238  17s       
    ├-✔ test-linux(2:image:alpine,tag:3.6)    loops-maps-7sqwk-2485477909  19s       
    └-✔ test-linux(3:image:ubuntu,tag:17.10)  loops-maps-7sqwk-3513479432  21s       
+```
 
 
 
 
 
-
-You can also create workflows directly with kubectl. However, the Argo CLI offers extra features
+You can also create workflows directly with the oc client. However, the Argo CLI offers extra features
 that kubectl does not, such as YAML validation, workflow visualization, parameter passing, retries
 and resubmits, suspend and resume, and more.
 
@@ -199,4 +200,4 @@ oc -n argo port-forward deployment/argo-ui 8001:8001
 Then visit: http://127.0.0.1:8001
 
 
-## 9. TODO More Testing and examples
+## 9. TODO More Testing and examples, more analysis on the WorkFlow Capabilities
