@@ -1,7 +1,8 @@
 
 
-Testing ArgoCD-workflows on CRC
+# Testing ArgoCD-workflows on OpenShift CRC
 
+Based on> 
 https://github.com/argoproj/argo/blob/master/examples/README.md
 
 
@@ -11,8 +12,6 @@ To see how Argo works, you can run examples of simple workflows and workflows th
 For the latter, you'll set up an artifact repository for storing the artifacts that are passed in
 the workflows. Here are the requirements and steps to run the workflows.
 
-## Requirements
-* Have a [kubeconfig](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/) file (default location is `~/.kube/config`).
 
 ## 1. Download Argo
 
@@ -36,8 +35,7 @@ oc create  -n argo -f https://raw.githubusercontent.com/argoproj/argo/stable/man
 ## 3. Configure the service account to run workflows
 
 To run all of the examples in this guide, the 'default' service account is too limited to support
-features such as artifacts, outputs, access to secrets, etc... For demo purposes, run the following
-command to grant admin privileges to the 'default' service account in the namespace 'default':
+features such as artifacts, outputs, access to secrets, etc... 
 
 
 ```bash
@@ -46,14 +44,6 @@ oc adm policy add-scc-to-user hostmount-anyuid -z hostmounter
 argo submit --serviceAccount hostmounter --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/hello-world.yaml
 argo submit --serviceAccount hostmounter --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/coinflip.yaml
 argo submit --serviceAccount hostmounter --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/loops-maps.yaml
-```
-
-For the bare minimum set of privileges which a workflow needs to function, see
-[Workflow RBAC](docs/workflow-rbac.md). You can also submit workflows which run with a different
-service account using:
-
-```bash
-argo submit --serviceaccount <name>
 ```
 
 ## 4. Run Simple Example Workflows
