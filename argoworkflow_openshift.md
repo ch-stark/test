@@ -217,3 +217,6 @@ Duration:            0 seconds
 [cstark@cstark engineering]$ argo submit --serviceaccount hostmounter --watch https://raw.githubusercontent.com/ch-stark/test/master/advanced_workflow.yaml
 
 ```
+
+ref:
+https://eksworkshop.com/batch/workflow-advanced/
