@@ -1,3 +1,10 @@
+
+
+Testing ArgoCD-workflows on CRC
+
+https://github.com/argoproj/argo/blob/master/examples/README.md
+
+
 # Argo Getting Started
 
 To see how Argo works, you can run examples of simple workflows and workflows that use artifacts.
@@ -5,34 +12,24 @@ For the latter, you'll set up an artifact repository for storing the artifacts t
 the workflows. Here are the requirements and steps to run the workflows.
 
 ## Requirements
-* Installed Kubernetes 1.9 or later
-* Installed [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * Have a [kubeconfig](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/) file (default location is `~/.kube/config`).
 
 ## 1. Download Argo
 
 Download the latest Argo binary version from https://github.com/argoproj/argo/releases/latest.
-
-Also available in Mac Homebrew:
-```
-brew install argoproj/tap/argo
 ```
 
 Also you can use this command to install for Linux 
 
 ```
-curl -sSL -o /usr/local/bin/argo https://github.com/argoproj/argo/releases/download/v2.3.0/argo-linux-amd64
-chmod +x /usr/local/bin/argo
+sudo curl -sSL -o /usr/local/bin/argo https://github.com/argoproj/argo/releases/download/v2.3.0/argo-linux-amd64
+sudo chmod +x /usr/local/bin/argo
 ```
 
 ## 2. Install the Controller and UI
 ```
-kubectl create namespace argo
-kubectl apply -n argo -f https://raw.githubusercontent.com/argoproj/argo/stable/manifests/install.yaml
-```
-NOTE: On GKE, you may need to grant your account the ability to create new clusterroles
-```
-kubectl create clusterrolebinding YOURNAME-cluster-admin-binding --clusterrole=cluster-admin --user=YOUREMAIL@gmail.com
+oc new-project create namespace argo
+oc create  -n argo -f https://raw.githubusercontent.com/argoproj/argo/stable/manifests/install.yaml
 ```
 
 ## 3. Configure the service account to run workflows
