@@ -40,9 +40,6 @@ command to grant admin privileges to the 'default' service account in the namesp
 ```
 oc create serviceaccount hostmounter
 oc adm policy add-scc-to-user hostmount-anyuid -z hostmounter
-
-
-```
 argo submit --serviceAccount hostmounter --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/hello-world.yaml
 argo submit --serviceAccount hostmounter --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/coinflip.yaml
 argo submit --serviceAccount hostmounter --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/loops-maps.yaml
@@ -67,6 +64,7 @@ argo logs xxx-pod-name-xxx #from get command above
 You can also create workflows directly with kubectl. However, the Argo CLI offers extra features
 that kubectl does not, such as YAML validation, workflow visualization, parameter passing, retries
 and resubmits, suspend and resume, and more.
+
 ```
 oc create -f https://raw.githubusercontent.com/argoproj/argo/master/examples/hello-world.yaml
 oc get wf
@@ -98,7 +96,7 @@ helm install stable/minio \
 Login to the Minio UI using a web browser (port 9000) after exposing obtaining the external IP using `kubectl`.
 ```
 oc get service argo-artifacts -o wide
-
+```
 
 NOTE: When minio is installed via Helm, it uses the following hard-wired default credentials,
 which you will use to login to the UI:
