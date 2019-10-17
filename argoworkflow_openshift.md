@@ -41,6 +41,8 @@ features such as artifacts, outputs, access to secrets, etc...
 ```bash
 oc create serviceaccount hostmounter
 oc adm policy add-scc-to-user hostmount-anyuid -z hostmounter
+oc create rolebinding default-admin --clusterrole=admin --serviceaccount=argoworkflow:hostmounter
+
 argo submit --serviceAccount hostmounter --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/hello-world.yaml
 argo submit --serviceAccount hostmounter --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/coinflip.yaml
 argo submit --serviceAccount hostmounter --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/loops-maps.yaml
@@ -77,6 +79,28 @@ argo list
 argo get xxx-workflow-name-xxx
 argo logs xxx-pod-name-xxx #from get command above
 ```
+
+example:
+Name:                loops-maps-7sqwk
+Namespace:           argoworkflow
+ServiceAccount:      hostmounter
+Status:              Succeeded
+Created:             Thu Oct 17 15:40:34 +0200 (25 seconds ago)
+Started:             Thu Oct 17 15:40:34 +0200 (25 seconds ago)
+Finished:            Thu Oct 17 15:40:59 +0200 (now)
+Duration:            25 seconds
+
+STEP                                         PODNAME                      DURATION  MESSAGE
+ ✔ loops-maps-7sqwk                                                                 
+ └-·-✔ test-linux(0:image:debian,tag:9.1)    loops-maps-7sqwk-2189354012  16s       
+   ├-✔ test-linux(1:image:debian,tag:8.9)    loops-maps-7sqwk-3416869238  17s       
+   ├-✔ test-linux(2:image:alpine,tag:3.6)    loops-maps-7sqwk-2485477909  19s       
+   └-✔ test-linux(3:image:ubuntu,tag:17.10)  loops-maps-7sqwk-3513479432  21s       
+
+
+
+
+
 
 You can also create workflows directly with kubectl. However, the Argo CLI offers extra features
 that kubectl does not, such as YAML validation, workflow visualization, parameter passing, retries
