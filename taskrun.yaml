@@ -1,0 +1,127 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TaskRun
+metadata:
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/sync-wave: '1'
+    kubectl.kubernetes.io/last-applied-configuration: >
+      {"apiVersion":"tekton.dev/v1alpha1","kind":"Task","metadata":{"annotations":{"argocd.argoproj.io/hook":"PreSync","argocd.argoproj.io/sync-wave":"1"},"labels":{"app.kubernetes.io/instance":"maestro-geo-maestro-eks"},"name":"build-pypi-image","namespace":"maestro-geo-maestro-eks"},"spec":{"inputs":{"params":[{"default":"Dockerfile","description":"The
+      path to the dockerfile to
+      build","name":"pathToDockerfile","type":"string"},{"default":".","description":"Relative
+      path to the build context used by Kaniko
+      (https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts)","name":"pathToContext","type":"string"},{"description":"The
+      package
+      name","name":"packageName","type":"string"}],"resources":[{"name":"source","outputImageDir":"","targetPath":"","type":"git"}]},"outputs":{"resources":[{"name":"builtImage","outputImageDir":"/builder/home/image-outputs/builtImage","targetPath":"","type":"image"}]},"steps":[{"env":[{"name":"ZOOX_PROJECT_NAME","value":"${inputs.params.packageName}"}],"image":"default.docker.zooxlabs.com/ci-python-library:tekton","imagePullPolicy":"Always","name":"build-pypi","resources":{},"workingDir":"/workspace/source/${inputs.params.pathToContext}"},{"args":["--dockerfile=/workspace/source/${inputs.params.pathToDockerfile}","--context=/workspace/source/${inputs.params.pathToContext}","--destination=${outputs.resources.builtImage.url}:${inputs.resources.source.revision}","--build-arg=PACKAGE_NAME=${inputs.params.packageName}"],"env":[{"name":"DOCKER_CONFIG","value":"/builder/home/.docker/"}],"image":"gcr.io/kaniko-project/executor:v0.10.0","imagePullPolicy":"Always","name":"build-and-push","resources":{}}]}}
+  creationTimestamp: '2019-08-21T19:27:53Z'
+  generateName: build-maestro-geo-image-
+  generation: 1
+  labels:
+    app.kubernetes.io/instance: maestro-geo-maestro-eks
+    tekton.dev/task: build-pypi-image
+  name: build-maestro-geo-image-d2a7383-presync-1566415665
+  namespace: maestro-geo-maestro-eks
+  resourceVersion: '9203532'
+  selfLink: >-
+    /apis/tekton.dev/v1alpha1/namespaces/maestro-geo-maestro-eks/taskruns/build-maestro-geo-image-d2a7383-presync-1566415665
+  uid: c5970796-c449-11e9-9ee6-0245b7c0921c
+spec:
+  inputs:
+    params:
+      - name: pathToDockerfile
+        value: dispatch/geo/Dockerfile
+      - name: pathToContext
+        value: dispatch/geo
+      - name: packageName
+        value: maestro-geo
+    resources:
+      - name: source
+        resourceRef: {}
+        resourceSpec:
+          params:
+            - name: revision
+              value: maestro-eks
+            - name: url
+              value: 'git@git.zooxlabs.com:kbambridge/driving'
+          type: git
+  outputs:
+    resources:
+      - name: builtImage
+        resourceRef: {}
+        resourceSpec:
+          params:
+            - name: url
+              value: default.docker.zooxlabs.com/maestro-geo
+          type: image
+  podTemplate: {}
+  serviceAccount: build-image
+  taskRef:
+    kind: Task
+    name: build-pypi-image
+  timeout: 1h0m0s
+status:
+  completionTime: '2019-08-21T19:40:21Z'
+  conditions:
+    - lastTransitionTime: '2019-08-21T19:40:21Z'
+      message: All Steps have completed executing
+      reason: Succeeded
+      status: 'True'
+      type: Succeeded
+  podName: build-maestro-geo-image-d2a7383-presync-1566415665-pod-fcbe4c
+  startTime: '2019-08-21T19:27:53Z'
+  steps:
+    - container: step-build-pypi
+      imageID: >-
+        docker-pullable://default.docker.zooxlabs.com/ci-python-library@sha256:7088b8af16cb4f4aaf12a5d6e42a6afb454e32ab72cb3ac62036bcbf9d13b50c
+      name: build-pypi
+      terminated:
+        containerID: >-
+          docker://a508b0c303ea95caa73c16e6f1490103a30336a2b243485a1ee964f231f03862
+        exitCode: 0
+        finishedAt: '2019-08-21T19:37:18Z'
+        reason: Completed
+        startedAt: '2019-08-21T19:28:01Z'
+    - container: step-build-and-push
+      imageID: >-
+        docker-pullable://gcr.io/kaniko-project/executor@sha256:78d44ec4e9cb5545d7f85c1924695c89503ded86a59f92c7ae658afa3cff5400
+      name: build-and-push
+      terminated:
+        containerID: >-
+          docker://1e4d5adf65fda7ad6be6b743ddc28290a588ad041668d3c494bad68ab5505a4d
+        exitCode: 0
+        finishedAt: '2019-08-21T19:40:20Z'
+        reason: Completed
+        startedAt: '2019-08-21T19:28:02Z'
+    - container: step-create-dir-builtimage-2tt7h
+      imageID: >-
+        docker-pullable://gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/bash@sha256:b183305a486aafbf207cf4dd969b38645b04e6fd18470f32fc7927d0a8035581
+      name: create-dir-builtimage-2tt7h
+      terminated:
+        containerID: >-
+          docker://ae5893ed64b6c08947aca24319f3cf032bdc54b66b4c3ecc150b503dfb8e6c93
+        exitCode: 0
+        finishedAt: '2019-08-21T19:28:04Z'
+        reason: Completed
+        startedAt: '2019-08-21T19:28:00Z'
+    - container: step-git-source-source-cjhvv
+      imageID: >-
+        docker-pullable://gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init@sha256:2aaaecd06986c7705f68f19435b8a913ef6701ac6b961df16d1535f45503cea5
+      name: git-source-source-cjhvv
+      terminated:
+        containerID: >-
+          docker://aebcfba1bc57db00f19ccc4069f0751b698f6a40a23448ce1fab6f5a4298433d
+        exitCode: 0
+        finishedAt: '2019-08-21T19:28:45Z'
+        reason: Completed
+        startedAt: '2019-08-21T19:28:00Z'
+    - container: step-image-digest-exporter-42dbh
+      imageID: >-
+        docker-pullable://gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter@sha256:b86cfca770c60d6965dced6c36745f04cdfea2680b517fb067828e68292f13be
+      name: image-digest-exporter-42dbh
+      terminated:
+        containerID: >-
+          docker://270bd47208eba7131505debf9b9d1c5bdf9bdb013c55bda5364de964c444091f
+        exitCode: 0
+        finishedAt: '2019-08-21T19:40:21Z'
+        message: '[]'
+        reason: Completed
+        startedAt: '2019-08-21T19:28:02Z'
