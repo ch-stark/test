@@ -5,7 +5,7 @@ metadata:
     argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/sync-wave: '1'
     kubectl.kubernetes.io/last-applied-configuration: >
-      {"apiVersion":"tekton.dev/v1alpha1","kind":"Task","metadata":{"annotations":{"argocd.argoproj.io/hook":"PreSync","argocd.argoproj.io/sync-wave":"1"},"labels":{"app.kubernetes.io/instance":"maestro-geo-maestro-eks"},"name":"build-pypi-image","namespace":"maestro-geo-maestro-eks"},"spec":{"inputs":{"params":[{"default":"Dockerfile","description":"The
+      {"apiVersion":"tekton.dev/v1alpha1","kind":"Task","metadata":{"annotations":{"argocd.argoproj.io/hook":"PreSync","argocd.argoproj.io/sync-wave":"1"},"labels":{"app.kubernetes.io/instance":"testproject"},"name":"build-pypi-image","namespace":"maestro-geo-maestro-eks"},"spec":{"inputs":{"params":[{"default":"Dockerfile","description":"The
       path to the dockerfile to
       build","name":"pathToDockerfile","type":"string"},{"default":".","description":"Relative
       path to the build context used by Kaniko
@@ -19,10 +19,10 @@ metadata:
     app.kubernetes.io/instance: maestro-geo-maestro-eks
     tekton.dev/task: build-pypi-image
   name: build-maestro-geo-image-d2a7383-presync-1566415665
-  namespace: maestro-geo-maestro-eks
+  namespace: testproject
   resourceVersion: '9203532'
   selfLink: >-
-    /apis/tekton.dev/v1alpha1/namespaces/maestro-geo-maestro-eks/taskruns/build-maestro-geo-image-d2a7383-presync-1566415665
+    /apis/tekton.dev/v1alpha1/namespaces/testproject/taskruns/build-maestro-geo-image-d2a7383-presync-1566415665
   uid: c5970796-c449-11e9-9ee6-0245b7c0921c
 spec:
   inputs:
@@ -32,7 +32,7 @@ spec:
       - name: pathToContext
         value: dispatch/geo
       - name: packageName
-        value: maestro-geo
+        value: testproject
     resources:
       - name: source
         resourceRef: {}
